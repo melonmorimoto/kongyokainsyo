@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>コンギョ教会 礼拝スタンプカード</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #ffdddd;
+      color: #222;
+      text-align: center;
+      padding: 2em;
+    }
+    .card {
+      background: white;
+      border-radius: 1em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 2em;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .stamps {
+      font-size: 2em;
+      letter-spacing: 1em;
+      margin: 1em 0;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 0.5em 1em;
+      border: none;
+      background-color: crimson;
+      color: white;
+      border-radius: 0.5em;
+      cursor: pointer;
+    }
+    .reward {
+      margin-top: 1em;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="username">スタンプカード</h1>
+    <div class="stamps" id="stamps">⬜⬜⬜</div>
+    <button onclick="addStamp()">礼拝に参加する</button>
+    <div class="reward" id="rewardMsg"></div>
+  </div>
+
+  <script>
+    // URLパラメータから名前を取得
+    const params = new URLSearchParams(location.search);
+    const name = params.get('name') || '名無し';
+    document.getElementById('username').innerText = `${name} のスタンプカード`;
+
+    // 保存用キー
+    const storageKey = `kongyo_stamp_${name}`;
+    let stampCount = parseInt(localStorage.getItem(storageKey)) || 0;
+
+    function renderStamps() {
+      const stamps = ["⬜", "⬜", "⬜"];
+      for (let i = 0; i < stampCount; i++) {
+        stamps[i] = "✅";
+      }
+      document.getElementById("stamps").innerText = stamps.join("");
+      document.getElementById("rewardMsg").innerText =
+        stampCount >= 3 ? "🎉 おめでとう！50チロルGET！" : "";
+    }
+
+    function addStamp() {
+      if (stampCount < 3) {
+        stampCount++;
+        localStorage.setItem(storageKey, stampCount);
+        renderStamps();
+      } else {
+        alert("もうチロルはもらえる状態です！");
+      }
+    }
+
+    renderStamps();
+  </script>
+</body>
+</html>
